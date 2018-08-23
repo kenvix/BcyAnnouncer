@@ -1,0 +1,10 @@
+*.js
+*/node_modules
+*/package-lock.json
+*.cache
+*.out
+*.dll
+*.exe
+*/obj
+*/downloads
+*.map

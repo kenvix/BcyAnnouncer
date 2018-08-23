@@ -1,0 +1,21 @@
+{
+  "tg": {
+    "name": "MoeNetBot",
+    "key": "422950672:AAGHNf8xm3tlQwVisem8hBxRokoCdHwcYts",
+    "proxy": {
+      "type": "socks5",
+      "socks5": {
+        "host": "127.0.0.1",
+        "port": 1080,
+        "user": "",
+        "password": ""
+      },
+      "https": {
+        "url": ""
+      }
+    }
+  },
+  "site": {
+    "url": "https://bcy.net/coser/toppost100"
+  }
+}
