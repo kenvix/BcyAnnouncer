@@ -16,6 +16,16 @@
     }
   },
   "site": {
-    "url": "https://bcy.net/coser/toppost100"
+    "url": "https://bcy.net/coser/toppost100",
+    "extname": ".jpg",
+    "sleep": {
+      "download": 0,
+      "check": 0
+    },
+    "storage": {
+      "dir": "download",
+      "maxnum": 100,
+      "index": "index.json"
+    }
   }
 }

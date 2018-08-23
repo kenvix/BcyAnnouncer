@@ -1,6 +1,6 @@
 import Telegraf, { ContextMessageUpdate, Telegram } from "telegraf";
 
-class announcer {
+export default class announcer {
     cfg: ITelegramConfig;
     bot: Telegraf<ContextMessageUpdate>;
     tg: Telegram;
