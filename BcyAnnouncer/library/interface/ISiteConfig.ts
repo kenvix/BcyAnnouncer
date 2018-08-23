@@ -1,6 +1,7 @@
 interface ISiteConfig {
     url: string,
     extname: string,
+    userAgent: string,
     sleep: {
         download: number,
         check: number
