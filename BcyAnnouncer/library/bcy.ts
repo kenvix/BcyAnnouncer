@@ -3,30 +3,54 @@ import { JSDOM } from "jsdom";
 import * as uri from "url";
 import * as path from "path";
 import * as fs from "fs";
+import { E2BIG } from "constants";
+import { setInterval } from "timers";
+import * as Downloader from "mt-files-downloader";
+import * as pEvent from "p-event";
 
 export default class bcy {
     cfg: ISiteConfig;
     domain: string;
-    tasks: ISiteTasks;
+    tasks: ISiteTasks = [];
 
     constructor(cfg: ISiteConfig) {
         this.cfg = cfg;
         const urlParseResult = uri.parse(cfg.url);
         this.domain = urlParseResult.protocol + "//" + urlParseResult.host;
     }
-    /*
-    public async addTask(url: string) {
-        const info = this.parseObject(url);
-        if (!fs.existsSync(path.join(this.cfg.storage.dir, info.md5 + this.cfg.extname))) {
-            this.tasks[info.md5] = {
-                url: info.url,
-                filename: info.md5 + this.cfg.extname
-            };
-        }
+
+    public async addTask(object: JQuery<HTMLElement>): Promise<void> {
+        const info = await this.parseObject(object);
+        if (!fs.existsSync(path.join(this.cfg.storage.dir, info.filename)))
+            this.tasks.push(info);
     }
-    */
-    public async processOneTask(object: JQuery<HTMLElement>) {
-        console.log(await this.parseObject(object));
+    
+    public async processOneTask(printLog: boolean = true) {
+        if (this.tasks.length > 0) {
+            const task = this.tasks.shift();
+            if (printLog)
+                console.log("download file: " + task.url)
+            const savePath = path.join(this.cfg.storage.dir, task.filename);
+            try {
+                let dl = (new Downloader()).download(task.url, savePath);
+                dl.on("error", function (msg) {
+                    throw new Error("failed to download: " + msg);
+                });/*
+                dl.on("end", function (dl) {
+                    console.log("file REALLY!! downloaded: " + savePath);
+                });*/
+                await dl.start();
+                await pEvent(dl, "end");
+                if (printLog)
+                    console.log("file downloaded: " + savePath);
+            } catch (err) {
+                this.tasks.push(task);
+                console.warn(err);
+                if (fs.existsSync(savePath))
+                    fs.unlink(savePath, () => { });
+            }
+        }
+        setTimeout(async () => await this.processOneTask(), 1000);
     }
 
     protected async parseObject(object: JQuery<HTMLElement>): Promise<ISiteTask> {
@@ -69,14 +93,15 @@ export default class bcy {
                 const $: JQueryStatic = require("jquery")(window);
                 const shit = this;
                 $("img.cardImage").each(function () {
-                    shit.processOneTask($(this));
+                    shit.addTask($(this));
                 });
             });
     }
 
     public async start(): Promise<void> {
         try {
-            setInterval(this.checkUpdate, this.cfg.sleep.check);
+            setInterval(async () => await this.checkUpdate(), 1000);
+            this.processOneTask();
         } catch (err) {
             console.warn(err);
         }

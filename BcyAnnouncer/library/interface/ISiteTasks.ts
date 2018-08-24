@@ -1,3 +1,3 @@
-interface ISiteTasks {
-    [index: string]: ISiteTask
+interface ISiteTasks extends Array<ISiteTask> {
+    [index: number]: ISiteTask
 }

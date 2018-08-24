@@ -27,7 +27,7 @@ async function Main() {
     const site = new bcy(cfg.site);
 
     //site.start();
-    site.checkUpdate();
+    site.start();
     tg.start();
 }
 
