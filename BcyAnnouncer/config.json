@@ -20,8 +20,8 @@
     "extname": ".jpg",
     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36",
     "sleep": {
-      "download": 0,
-      "check": 0
+      "download": 2000,
+      "check": 20000
     },
     "storage": {
       "dir": "download",

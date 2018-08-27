@@ -3,5 +3,7 @@ interface ISiteTask {
     detailUrl: string,
     author?: string,
     tags?: string[],
-    filename: string
+    filename: string,
+    fullpath?: string,
+    hash: string
 }

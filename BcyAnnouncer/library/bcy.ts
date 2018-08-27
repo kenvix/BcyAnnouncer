@@ -4,53 +4,67 @@ import * as uri from "url";
 import * as path from "path";
 import * as fs from "fs";
 import { E2BIG } from "constants";
-import { setInterval } from "timers";
+import { setInterval, setTimeout } from "timers";
 import * as Downloader from "mt-files-downloader";
 import * as pEvent from "p-event";
+import index from "./index";
 
 export default class bcy {
     cfg: ISiteConfig;
     domain: string;
     tasks: ISiteTasks = [];
+    index: ISiteIndex;
 
     constructor(cfg: ISiteConfig) {
         this.cfg = cfg;
         const urlParseResult = uri.parse(cfg.url);
         this.domain = urlParseResult.protocol + "//" + urlParseResult.host;
+        this.index = index.parse(cfg.storage.index);
     }
 
     public async addTask(object: JQuery<HTMLElement>): Promise<void> {
         const info = await this.parseObject(object);
-        if (!fs.existsSync(path.join(this.cfg.storage.dir, info.filename)))
+        if (!fs.existsSync(info.fullpath))
             this.tasks.push(info);
     }
     
-    public async processOneTask(printLog: boolean = true) {
+    public async startProcessTask(printLog: boolean = true) {
         if (this.tasks.length > 0) {
             const task = this.tasks.shift();
             if (printLog)
                 console.log("download file: " + task.url)
-            const savePath = path.join(this.cfg.storage.dir, task.filename);
             try {
-                let dl = (new Downloader()).download(task.url, savePath);
+                let dl = (new Downloader()).download(task.url, task.fullpath);
                 dl.on("error", function (msg) {
                     throw new Error("failed to download: " + msg);
-                });/*
-                dl.on("end", function (dl) {
-                    console.log("file REALLY!! downloaded: " + savePath);
-                });*/
-                await dl.start();
+                });
+                dl.start();
                 await pEvent(dl, "end");
+                this.addIndex(task);
                 if (printLog)
-                    console.log("file downloaded: " + savePath);
+                    console.log("file downloaded: " + task.fullpath);
+                this.addIndex(task);
             } catch (err) {
                 this.tasks.push(task);
                 console.warn(err);
-                if (fs.existsSync(savePath))
-                    fs.unlink(savePath, () => { });
+                if (fs.existsSync(task.fullpath))
+                    fs.unlink(task.fullpath, () => { });
             }
         }
-        setTimeout(async () => await this.processOneTask(), 1000);
+        setTimeout(async () => await this.startProcessTask(), this.cfg.sleep.download);
+    }
+
+    protected async addIndex(object: ISiteTask) {
+        this.index[object.hash] = object;
+        this.saveIndex();
+    }
+
+    protected async saveIndex() {
+        try {
+            index.save(this.cfg.storage.index, this.index);
+        } catch (err) {
+            console.warn("Failed to save Index file: " + err);
+        }
     }
 
     protected async parseObject(object: JQuery<HTMLElement>): Promise<ISiteTask> {
@@ -71,37 +85,38 @@ export default class bcy {
         $("ul.tags li.tag").each(function () {
             tags.push($(this).find("a").text().trim());
         });
+        const filename = path.basename(uri.parse(returnUrl).pathname);
         return {
             url: returnUrl,
             detailUrl: detailUrl,
-            filename: path.basename(uri.parse(returnUrl).pathname),
+            filename: filename,
             author: father.attr("title").trim(),
-            tags: tags
+            tags: tags,
+            fullpath: path.join(this.cfg.storage.dir, filename),
+            hash: filename.substring(0, filename.length - path.extname(filename).length)
         }
     }
 
-    public async checkUpdate(): Promise<void> {
-        superagent.get(this.cfg.url)
-            .set("Useragent", this.cfg.userAgent)
-            .end(async (err, res) => {
-                if (err) throw err;
-                if (!res || res.text.length < 1)
-                    throw new Error("fuck the fucking server boom!!");
-                const dom = new JSDOM(res.text);
-                const window = dom.window;
-                const document = window.document;
-                const $: JQueryStatic = require("jquery")(window);
-                const shit = this;
-                $("img.cardImage").each(function () {
-                    shit.addTask($(this));
-                });
-            });
+    public async startCheckUpdate(): Promise<void> {
+        const res = await superagent.get(this.cfg.url)
+            .set("Useragent", this.cfg.userAgent);
+        if (!res || typeof (res.text.length) == "undefined" || res.text.length < 1)
+            throw new Error("fuck the fucking server boom!!");
+        const dom = new JSDOM(res.text);
+        const window = dom.window;
+        const document = window.document;
+        const $: JQueryStatic = require("jquery")(window);
+        const shit = this;
+        $("img.cardImage").each(function () {
+            shit.addTask($(this));
+        });
+        setTimeout(async () => await this.startCheckUpdate(), this.cfg.sleep.check);
     }
 
     public async start(): Promise<void> {
         try {
-            setInterval(async () => await this.checkUpdate(), 1000);
-            this.processOneTask();
+            this.startCheckUpdate();
+            this.startProcessTask();
         } catch (err) {
             console.warn(err);
         }

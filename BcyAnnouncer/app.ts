@@ -22,6 +22,10 @@ async function Main() {
     cfg.site.storage.dir = downloadPath;
     if (!fs.existsSync(downloadPath))
         fs.mkdirSync(downloadPath);
+    cfg.site.storage.index = path.join(downloadPath, cfg.site.storage.index);
+    if (!fs.existsSync(cfg.site.storage.index)) {
+        fs.writeFileSync(cfg.site.storage.index, "{}", "utf8");
+    }
     //Telegraf Init
     const tg = new announcer(cfg.tg);
     const site = new bcy(cfg.site);

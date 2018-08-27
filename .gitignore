@@ -7,4 +7,5 @@
 *.exe
 */obj
 */downloads
+*/download
 *.map
