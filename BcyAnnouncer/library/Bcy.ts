@@ -8,34 +8,38 @@ import { setInterval, setTimeout } from "timers";
 import * as Downloader from "mt-files-downloader";
 import * as pEvent from "p-event";
 import index from "./index";
+import telegramAnnouncer from "./telegramAnnouncer";
+import IEnabledAnnouncers from "./interface/IEnabledAnnouncers";
 
-export default class bcy {
+export default class Bcy {
     cfg: ISiteConfig;
     domain: string;
-    tasks: ISiteTasks = [];
+    static tasks: ISiteTasks = [];
     index: ISiteIndex;
+    enabledAnnouncers: IEnabledAnnouncers;
 
-    constructor(cfg: ISiteConfig) {
+    constructor(cfg: ISiteConfig, enabledAnnouncers: IEnabledAnnouncers) {
         this.cfg = cfg;
         const urlParseResult = uri.parse(cfg.url);
         this.domain = urlParseResult.protocol + "//" + urlParseResult.host;
         this.index = index.parse(cfg.storage.index);
+        this.enabledAnnouncers = enabledAnnouncers;
     }
 
     public async addTask(object: JQuery<HTMLElement>): Promise<void> {
         const info = await this.parseObject(object);
         if (!fs.existsSync(info.fullpath))
-            this.tasks.push(info);
+            Bcy.tasks.push(info);
     }
     
     public async startProcessTask(printLog: boolean = true) {
-        if (this.tasks.length > 0) {
-            const task = this.tasks.shift();
+        if (Bcy.tasks.length > 0) {
+            const task = Bcy.tasks.shift();
             if (printLog)
                 console.log("download file: " + task.url)
             try {
                 let dl = (new Downloader()).download(task.url, task.fullpath);
-                dl.on("error", function (msg) {
+                dl.on("error", msg => {
                     throw new Error("failed to download: " + msg);
                 });
                 dl.start();
@@ -44,8 +48,9 @@ export default class bcy {
                 if (printLog)
                     console.log("file downloaded: " + task.fullpath);
                 this.addIndex(task);
+                this.publish(task);
             } catch (err) {
-                this.tasks.push(task);
+                Bcy.tasks.push(task);
                 console.warn(err);
                 if (fs.existsSync(task.fullpath))
                     fs.unlink(task.fullpath, () => { });
@@ -120,5 +125,12 @@ export default class bcy {
         } catch (err) {
             console.warn(err);
         }
+    }
+
+    public async publish(object: ISiteTask) {
+        if (this.enabledAnnouncers.telegram)
+            this.enabledAnnouncers.telegram.addTask(object);
+        if (this.enabledAnnouncers.xmlrpc)
+            this.enabledAnnouncers.xmlrpc.addTask(object);
     }
 }

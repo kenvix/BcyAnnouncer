@@ -1,7 +1,12 @@
 {
   "tg": {
+    "enable": false,
     "name": "MoeNetBot",
     "key": "422950672:AAGHNf8xm3tlQwVisem8hBxRokoCdHwcYts",
+    "chatid": "@BcyPhotos",
+    "sleep": 500,
+    "mode": "sendurl",
+    "template": "telegram.md",
     "proxy": {
       "type": "socks5",
       "socks5": {
@@ -14,6 +19,14 @@
         "url": ""
       }
     }
+  },
+  "xmlrpc": {
+    "enable": true,
+    "url": "http://localhost/wordpress/",
+    "username": "Kenvix",
+    "password": "123456",
+    "template": "xmlrpc.html",
+    "sleep": 0
   },
   "site": {
     "url": "https://bcy.net/coser/toppost100",

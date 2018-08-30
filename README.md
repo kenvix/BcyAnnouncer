@@ -1,4 +1,9 @@
-若无法安装是 sqlite3 依赖，请尝试使用 **管理员**(Windows) 或 **root** 权限执行：
-```shell
-npm --add-python-to-path='true' --debug install --global windows-build-tools
+# 半次元自动爬虫
+此项目正在开发中，当前状态：
 ```
+正在实现Telegram发布
+√ 已实现多线程下载和记录
+```
+
+ * 支持使用代理
+ * Telegram 部分支持使用代理

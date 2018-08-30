@@ -1,6 +1,9 @@
-interface ITelegramConfig {
+interface ITelegramConfig extends ICommonAnnouncerConfig {
     name: string,
     key: string,
+    chatid: string,
+    mode: TelegramUploadMode,
+    template: string,
     proxy: {
         type: string,
         socks5?: {

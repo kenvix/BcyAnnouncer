@@ -24,6 +24,7 @@
     "socks5-https-client": "^1.2.1",
     "superagent": "^3.8.3",
     "telegraf": "^3.22.2",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.1",
+    "wordpress": "^1.4.1"
   }
 }

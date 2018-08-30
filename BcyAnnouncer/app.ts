@@ -1,15 +1,13 @@
-/// <reference path="library/interface/IConfig.ts" />
-/// <reference path="library/announcer.ts" />
-/// <reference path="library/bcy.ts" />
-
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import * as process from "process";
-import bcy from "./library/bcy";
-import announcer from "./library/announcer";
+import Bcy from "./library/bcy";
+import TelegramAnnouncer from "./library/telegramAnnouncer";
+import IEnabledAnnouncers from "./library/interface/IEnabledAnnouncers";
+import XMLRPCAnnouncer from "./library/xmlrpcAnnouncer";
 
-async function Main() {
+(async () => {
     //Initialize
     console.log("Bcy Telegram Announcer v1.0 // By Kenvix");
     const cfgPath = path.join(__dirname, "config.json");
@@ -17,22 +15,30 @@ async function Main() {
         console.error(cfgPath + " not exist!!");
         process.exit(2);
     }
-    let cfg: IConfig = JSON.parse(fs.readFileSync(cfgPath, "utf8"));
-    const downloadPath = path.join(__dirname, cfg.site.storage.dir);
-    cfg.site.storage.dir = downloadPath;
+    let config: IConfig = JSON.parse(fs.readFileSync(cfgPath, "utf8"));
+    const downloadPath = path.join(__dirname, config.site.storage.dir);
+    const indexPath = path.join(__dirname, "index");
+    config.site.storage.dir = downloadPath;
     if (!fs.existsSync(downloadPath))
         fs.mkdirSync(downloadPath);
-    cfg.site.storage.index = path.join(downloadPath, cfg.site.storage.index);
-    if (!fs.existsSync(cfg.site.storage.index)) {
-        fs.writeFileSync(cfg.site.storage.index, "{}", "utf8");
+    if (!fs.existsSync(indexPath))
+        fs.mkdirSync(indexPath);
+    config.site.storage.index = path.join(indexPath, config.site.storage.index);
+    if (!fs.existsSync(config.site.storage.index)) {
+        fs.writeFileSync(config.site.storage.index, "{}", "utf8");
     }
     //Telegraf Init
-    const tg = new announcer(cfg.tg);
-    const site = new bcy(cfg.site);
+    const tg = new TelegramAnnouncer(config.tg);
+    const xmlrpc = new XMLRPCAnnouncer(config.xmlrpc);
+    let enabledAnnouncers: IEnabledAnnouncers = {
+        telegram: config.tg.enable ? tg : false,
+        xmlrpc: config.xmlrpc.enable ? xmlrpc : false
+    }
+    const site = new Bcy(config.site, enabledAnnouncers);
 
-    //site.start();
+    if (config.tg.enable) {
+        tg.start();
+        console.log("Publisher Module: Telegram Channel Enabled");
+    }
     site.start();
-    tg.start();
-}
-
-Main();
+})();

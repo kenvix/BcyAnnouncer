@@ -1,7 +1,5 @@
-/// <reference path="ITelegramConfig.ts" />
-/// <reference path="ISiteConfig.ts" />
-
 interface IConfig {
     tg: ITelegramConfig,
+    xmlrpc: IXMLRPCConfig,
     site: ISiteConfig
 }

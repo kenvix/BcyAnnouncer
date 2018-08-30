@@ -1,6 +1,6 @@
 import * as fs from "fs";
 
-export default class index {
+export default class Index {
     public static parse(path: string): ISiteIndex {
         return JSON.parse(fs.readFileSync(path, "utf8"));
     }

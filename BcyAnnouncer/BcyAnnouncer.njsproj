@@ -63,12 +63,27 @@
     <Content Include="config.json">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="library\template\telegram.md">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\template\xmlrpc.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <TypeScriptCompile Include="library\bcy.ts">
+    <TypeScriptCompile Include="library\Bcy.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="library\index.ts">
+    <TypeScriptCompile Include="library\CommonAnnouncer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="library\Index.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="library\interface\ICommonAnnouncerConfig.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="library\interface\IEnabledAnnouncers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="library\interface\ISiteIndex.ts">
@@ -83,7 +98,10 @@
     <TypeScriptCompile Include="library\interface\IConfig.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="library\announcer.ts">
+    <TypeScriptCompile Include="library\interface\IXMLRPCConfig.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="library\TelegramAnnouncer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="library\interface\ISiteConfig.ts">
@@ -92,10 +110,14 @@
     <TypeScriptCompile Include="library\interface\ITelegramConfig.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="library\XMLRPCAnnouncer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="library\" />
     <Folder Include="library\interface\" />
+    <Folder Include="library\template\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
