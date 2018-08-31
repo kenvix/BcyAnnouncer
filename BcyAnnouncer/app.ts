@@ -33,12 +33,16 @@ import XMLRPCAnnouncer from "./library/xmlrpcAnnouncer";
     let enabledAnnouncers: IEnabledAnnouncers = {
         telegram: config.tg.enable ? tg : false,
         xmlrpc: config.xmlrpc.enable ? xmlrpc : false
-    }
+    };
     const site = new Bcy(config.site, enabledAnnouncers);
 
     if (config.tg.enable) {
         tg.start();
-        console.log("Publisher Module: Telegram Channel Enabled");
+        console.log("Publisher Module: Telegram Channel ["+ config.tg.chatid +"] Enabled");
+    }
+    if (config.xmlrpc.enable) {
+        xmlrpc.start();
+        console.log("Publisher Module: XMLRPC ["+config.xmlrpc.url+"] Enabled");
     }
     site.start();
 })();
