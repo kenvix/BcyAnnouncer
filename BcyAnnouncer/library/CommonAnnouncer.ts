@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import Templater from "./Templater";
 
 /**
  * Common Announcer
@@ -47,6 +48,10 @@ export default abstract class CommonAnnouncer {
             }
         }
         setTimeout(async () => await this.startProcessTask(), this.sleep);
+    }
+
+    public compileTemplate(object: ISiteTask, file: string = this.name) {
+        return (new Templater(file)).addVar("item", object).get();
     }
 
     abstract sleep: number;

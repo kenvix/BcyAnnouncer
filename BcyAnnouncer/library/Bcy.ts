@@ -90,11 +90,15 @@ export default class Bcy {
         $("ul.tags li.tag").each(function () {
             tags.push($(this).find("a").text().trim());
         });
+        $("div.post__content>p>br").each(function () {
+            $(this).replaceWith("\n");
+        });
         const filename = path.basename(uri.parse(returnUrl).pathname);
         return {
             url: returnUrl,
             detailUrl: detailUrl,
             filename: filename,
+            description: $("div.post__content>p").text(),
             author: father.attr("title").trim(),
             tags: tags,
             fullpath: path.join(this.cfg.storage.dir, filename),

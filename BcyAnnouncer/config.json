@@ -26,6 +26,7 @@
     "username": "Kenvix",
     "password": "123456",
     "template": "xmlrpc.html",
+    "upload": true,
     "sleep": 0
   },
   "site": {

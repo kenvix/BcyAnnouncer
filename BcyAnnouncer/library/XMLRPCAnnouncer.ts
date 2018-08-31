@@ -25,6 +25,11 @@ export default class XMLRPCAnnouncer extends CommonAnnouncer {
     }
 
     public async send(object: ISiteTask) {
-
+        this.client.newPost({
+            title: this.compileTemplate(object, "XMLRPC.title"),
+            content: this.compileTemplate(object),
+        }, function( error, data ) {
+            console.log( arguments );
+        });
     }
 }

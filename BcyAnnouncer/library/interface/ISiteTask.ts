@@ -4,6 +4,7 @@ interface ISiteTask {
     author?: string,
     tags?: string[],
     filename: string,
+    description?: string,
     fullpath?: string,
     hash: string
 }
