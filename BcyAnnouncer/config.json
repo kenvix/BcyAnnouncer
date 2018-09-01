@@ -31,7 +31,10 @@
     "category": [
       "菊苣","大佬"
     ],
-    "blogid": 0,
+    "comment_status": "open",
+    "blog_id": 0,
+    "post_password" : "",
+    "ping_status" : "closed",
     "sleep": 0
   },
   "site": {

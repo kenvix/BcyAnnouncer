@@ -6,6 +6,7 @@ import * as xmlrpc from "xmlrpc";
 import * as parseURL from "url";
 import Templater from "./Templater";
 import {ActionRefusedError} from "./Errors";
+import Promise = JQuery.Promise;
 
 /**
  * Announcer of Wordpress XMLRPC API
@@ -31,18 +32,22 @@ export default class XMLRPCAnnouncer extends CommonAnnouncer {
         });
     }
 
-    public buildForm(object: ISiteTask) {
+    public async buildForm(object: ISiteTask) {
         return [
-            this.cfg.blogid,
+            this.cfg.blog_id,
             this.cfg.username,
             this.cfg.password,
             {
-                "post_title" : this.compileTemplate(object, "XMLRPC.title"),
+                "post_title" : await this.compileTemplate(object, "XMLRPC.title"),
                 "post_status" : this.cfg.status,
-                "post_content": this.compileTemplate(object),
+                "post_content": await this.compileTemplate(object),
                 "terms_names" : {
                     "post_tag": object.tags,
-                    "category": this.cfg.category
+                    "category": this.cfg.category,
+                    //"comment_status": this.cfg.comment_status,
+                    //"post_password" : this.cfg.post_password,
+                    //"ping_status" : this.cfg.ping_status,
+                    //"post_format" : this.cfg.post_format,
                 }
             }];
     }
@@ -51,13 +56,18 @@ export default class XMLRPCAnnouncer extends CommonAnnouncer {
         await this.startProcessTask();
     }
 
+    /**
+     * Send XMLRPC Wordpress Add Post Request
+     * @param {ISiteTask} object
+     * @returns {Promise<string>} new post id
+     */
     public async send(object: ISiteTask) {
         try {
             if(this.cfg.upload) {
 
             }
-            await new Promise((resolve, reject) => {
-                this.client.methodCall("wp.newPost", this.buildForm(object), (error, value) => {
+            return <string>await new Promise(async (resolve, reject) => {
+                this.client.methodCall("wp.newPost", await this.buildForm(object), (error, value) => {
                     if(error) reject(error);
                     else resolve(value);
                 });

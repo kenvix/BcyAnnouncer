@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import Templater from "./Templater";
+import * as ejs from "ejs";
+import {IllegalArgumentError} from "./Errors";
 
 /**
  * Common Announcer
@@ -50,8 +51,16 @@ export default abstract class CommonAnnouncer {
         setTimeout(async () => await this.startProcessTask(), this.sleep);
     }
 
-    public compileTemplate(object: ISiteTask, file: string = this.name) {
-        return (new Templater(file)).addVar("item", object).get();
+    public async compileTemplate(object: ISiteTask, file: string = this.name) {
+        const fullpath = path.join(__dirname, "template", file + ".ejs");
+        if(!fs.existsSync(fullpath))
+            throw new IllegalArgumentError("EJS File not exist!!!");
+        return await new Promise((resolve, reject) => {
+            ejs.renderFile(fullpath, {item: object}, (err, str) => {
+                if(err) reject(err);
+                else resolve(str);
+            });
+        });
     }
 
     abstract sleep: number;
