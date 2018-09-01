@@ -1,8 +1,16 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as wordpress from "wordpress";
 import CommonAnnouncer from "./CommonAnnouncer";
+import * as mime from "mime";
+import * as xmlrpc from "xmlrpc";
+import * as parseURL from "url";
+import Templater from "./Templater";
+import {ActionRefusedError} from "./Errors";
 
+/**
+ * Announcer of Wordpress XMLRPC API
+ * @see https://codex.wordpress.org/XML-RPC_WordPress_API/Posts
+ */
 export default class XMLRPCAnnouncer extends CommonAnnouncer {
     cfg: IXMLRPCConfig;
     client: any;
@@ -12,12 +20,31 @@ export default class XMLRPCAnnouncer extends CommonAnnouncer {
         super();
         this.cfg = cfg;
         this.sleep = cfg.sleep;
-        this.client = wordpress.createClient({
-            url: this.cfg.url,
-            username: this.cfg.username,
-            password: this.cfg.password
+        //const url = parseURL.parse(this.cfg.url);
+        //const defaultPort = url.protocol == 'https:' ? "443" : "80";
+        this.client = xmlrpc.createClient({
+            url: cfg.url,
+            basic_auth: {
+                user: cfg.username,
+                pass: cfg.password
+            }
         });
-        this.loadTasks();
+    }
+
+    public buildForm(object: ISiteTask) {
+        return [
+            this.cfg.blogid,
+            this.cfg.username,
+            this.cfg.password,
+            {
+                "post_title" : this.compileTemplate(object, "XMLRPC.title"),
+                "post_status" : this.cfg.status,
+                "post_content": this.compileTemplate(object),
+                "terms_names" : {
+                    "post_tag": object.tags,
+                    "category": this.cfg.category
+                }
+            }];
     }
 
     public async start() {
@@ -25,11 +52,18 @@ export default class XMLRPCAnnouncer extends CommonAnnouncer {
     }
 
     public async send(object: ISiteTask) {
-        this.client.newPost({
-            title: this.compileTemplate(object, "XMLRPC.title"),
-            content: this.compileTemplate(object),
-        }, function( error, data ) {
-            console.log( arguments );
-        });
+        try {
+            if(this.cfg.upload) {
+
+            }
+            await new Promise((resolve, reject) => {
+                this.client.methodCall("wp.newPost", this.buildForm(object), (error, value) => {
+                    if(error) reject(error);
+                    else resolve(value);
+                });
+            });
+        } catch (e) {
+            throw new ActionRefusedError(e.toString());
+        }
     }
 }

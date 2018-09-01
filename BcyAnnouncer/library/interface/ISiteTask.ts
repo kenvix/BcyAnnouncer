@@ -6,5 +6,6 @@ interface ISiteTask {
     filename: string,
     description?: string,
     fullpath?: string,
-    hash: string
+    hash: string,
+    localurl?: string
 }

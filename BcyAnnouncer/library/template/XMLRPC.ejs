@@ -1,1 +1,11 @@
-﻿
+﻿<p>Author: <%= item.author %></p>
+Tags:
+<ul>
+    <% for (var key in item.tags) { %>
+    <li><%= item.tags[key] %></li>
+    <% } %>
+</ul>
+<div>
+    <%= item.description %>
+</div>
+<p>From: <a href="<%= item.detailUrl %>" target="_blank"><%= item.detailUrl %></a></p>

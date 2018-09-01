@@ -22,11 +22,16 @@
   },
   "xmlrpc": {
     "enable": true,
-    "url": "http://localhost/wordpress/",
+    "url": "http://localhost/wordpress/xmlrpc.php",
     "username": "Kenvix",
-    "password": "123456",
+    "password": "000000",
     "template": "xmlrpc.html",
     "upload": true,
+    "status": "publish",
+    "category": [
+      "菊苣","大佬"
+    ],
+    "blogid": 0,
     "sleep": 0
   },
   "site": {
