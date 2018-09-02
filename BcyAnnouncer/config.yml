@@ -14,12 +14,13 @@ tg:
             user: 
             password: 
         https:
-           url: 
+           url:
 xmlrpc:
+     #见 https://codex.wordpress.org/XML-RPC_WordPress_API
     enable: true
     url: http://localhost/wordpress/xmlrpc.php
     username: Kenvix
-    password: 000000
+    password: "000000"
     template: xmlrpc.html
     upload: true
     status: publish

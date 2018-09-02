@@ -51,7 +51,7 @@ export default class XMLRPCAnnouncer extends CommonAnnouncer {
     public async send(object: ISiteTask) {
         if(this.cfg.upload) {
             const uploadBase64Binary = <string>await new Promise((resolve, reject) => {
-                fs.readFile(object.fullpath, (err, str) => {
+                fs.readFile(object.fullpath,(err, str) => {
                     if(err) reject(err);
                     else resolve(str);
                 });

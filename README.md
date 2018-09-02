@@ -30,3 +30,12 @@ Typecho 通常为：`http(s)://博客地址/index.php/action/xmlrpc`
 | item.fullpath | string 本地已下载的文件完整路径 |
 | item.hash | string 已下载的文件 MD5 |
 | item.localurl | string 仅特定Announcer且开启upload选项才可用。上传后的图片URL |
+## 常见问题解决办法
+### XML-RPC 发布
+#### 报错 Unknown XML-RPC tag 
+```
+Error: Unknown XML-RPC tag 'TITLE'    
+Error: Unknown XML-RPC tag 'META'   
+```
+你的服务器配置有问题，打印多半是服务端提示 `413 Request Entity Too Large`     
+检查你的服务端(PHP等)的文件大小限制
