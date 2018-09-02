@@ -5,6 +5,11 @@
 请一定要记得修改延时设置，防止被屏蔽。      
 
 当前状态：V1.0 版本已发布
+## 部署
+1. 前往 Release 页面下载发布版本
+2. 运行 `npm install` 安装依赖包
+3. 修改配置文件 `config.yml`
+4. 运行 `node app` 开始运行
 ## 配置博客文章发布
 您需要使用支持 XMLRPC (或称为离线写作) 的博客程序，例如 Wordpress和Typecho.      
 然后，修改 `config.json` 的 `xmlrpc` 节的 `url` 字段   
