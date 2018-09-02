@@ -1,5 +1,6 @@
 /// <reference types="jquery" />
 import IEnabledAnnouncers from "./interface/IEnabledAnnouncers";
+
 export default class bcy {
     cfg: ISiteConfig;
     domain: string;

@@ -1,4 +1,4 @@
-import Telegraf, { ContextMessageUpdate, Telegram } from "telegraf";
+import Telegraf, {ContextMessageUpdate} from "telegraf";
 import * as fs from "fs";
 import "./TelegramUploadMode";
 import CommonAnnouncer from "./CommonAnnouncer";

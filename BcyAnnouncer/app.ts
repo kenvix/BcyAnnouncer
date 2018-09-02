@@ -1,11 +1,10 @@
 import * as fs from "fs";
-import * as os from "os";
 import * as path from "path";
 import * as process from "process";
-import Bcy from "./library/bcy";
-import TelegramAnnouncer from "./library/telegramAnnouncer";
+import Bcy from "./library/Bcy";
+import TelegramAnnouncer from "./library/TelegramAnnouncer";
 import IEnabledAnnouncers from "./library/interface/IEnabledAnnouncers";
-import XMLRPCAnnouncer from "./library/xmlrpcAnnouncer";
+import XMLRPCAnnouncer from "./library/XMLRPCAnnouncer";
 import * as yaml from "js-yaml";
 
 (async () => {

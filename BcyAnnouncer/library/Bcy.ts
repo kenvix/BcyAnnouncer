@@ -1,14 +1,12 @@
 import * as superagent from "superagent";
-import { JSDOM } from "jsdom";
+import {JSDOM} from "jsdom";
 import * as uri from "url";
 import * as path from "path";
 import * as fs from "fs";
-import { E2BIG } from "constants";
-import { setInterval, setTimeout } from "timers";
+import {setTimeout} from "timers";
 import * as Downloader from "mt-files-downloader";
 import * as pEvent from "p-event";
-import index from "./index";
-import telegramAnnouncer from "./telegramAnnouncer";
+import Index from "./Index";
 import IEnabledAnnouncers from "./interface/IEnabledAnnouncers";
 
 export default class Bcy {
@@ -22,7 +20,7 @@ export default class Bcy {
         this.cfg = cfg;
         const urlParseResult = uri.parse(cfg.url);
         this.domain = urlParseResult.protocol + "//" + urlParseResult.host;
-        this.index = index.parse(cfg.storage.index);
+        this.index = Index.parse(cfg.storage.index);
         this.enabledAnnouncers = enabledAnnouncers;
     }
 
@@ -66,7 +64,7 @@ export default class Bcy {
 
     protected async saveIndex() {
         try {
-            index.save(this.cfg.storage.index, this.index);
+            Index.save(this.cfg.storage.index, this.index);
         } catch (err) {
             console.warn("Failed to save Index file: " + err);
         }

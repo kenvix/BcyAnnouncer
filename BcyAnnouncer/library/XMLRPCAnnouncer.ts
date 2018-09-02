@@ -1,10 +1,8 @@
 import * as fs from "fs";
-import * as path from "path";
 import CommonAnnouncer from "./CommonAnnouncer";
 import * as mime from "mime";
 import * as xmlrpc from "xmlrpc";
-import * as parseURL from "url";
-import {ActionRefusedError, NetworkError} from "./Errors";
+import {NetworkError} from "./Errors";
 
 /**
  * Announcer of Wordpress XMLRPC API

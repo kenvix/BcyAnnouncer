@@ -1,7 +1,7 @@
-import telegramAnnouncer from "../telegramAnnouncer";
-import xmlrpcAnnouncer from "../xmlrpcAnnouncer";
+import TelegramAnnouncer from "../TelegramAnnouncer";
+import XMLRPCAnnouncer from "../XMLRPCAnnouncer";
 
 export default interface IEnabledAnnouncers {
-    telegram: telegramAnnouncer | false,
-    xmlrpc: xmlrpcAnnouncer | false
+    telegram: TelegramAnnouncer | false,
+    xmlrpc: XMLRPCAnnouncer | false
 }

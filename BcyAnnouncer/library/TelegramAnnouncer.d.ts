@@ -1,6 +1,7 @@
-import Telegraf, { ContextMessageUpdate } from "telegraf";
+import Telegraf, {ContextMessageUpdate} from "telegraf";
 import "./TelegramUploadMode";
 import commonAnnouncer from "./commonAnnouncer";
+
 export default class telegramAnnouncer extends commonAnnouncer {
     cfg: ITelegramConfig;
     bot: Telegraf<ContextMessageUpdate>;

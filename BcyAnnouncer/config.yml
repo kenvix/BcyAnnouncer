@@ -48,4 +48,4 @@ site:
     storage:
         dir: download
         maxnum: 100
-        index: index.json
+        index: Index.json

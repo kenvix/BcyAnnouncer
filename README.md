@@ -8,9 +8,10 @@
 **警告**：使用本软件即表明您同意承担因使用本软件所造成的一切后果，作者不对此承担任何责任。
 ## 部署
 1. 前往 Release 页面下载发布版本
-2. 运行 `npm install` 安装依赖包
-3. 修改配置文件 `config.yml`
-4. 运行 `node app` 开始运行
+2. 安装 Nodejs, Yarn ( `npm install yarn -g` )
+3. 运行 `yarn install` 安装依赖包
+4. 修改配置文件 `config.yml`
+5. 运行 `node app` 开始运行
 ## 配置博客文章发布
 您需要使用支持 XMLRPC (或称为离线写作) 的博客程序，例如 Wordpress和Typecho.      
 然后，修改 `config.json` 的 `xmlrpc` 节的 `url` 字段   
