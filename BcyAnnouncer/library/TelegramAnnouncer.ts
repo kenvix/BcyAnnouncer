@@ -44,23 +44,24 @@ export default class TelegramAnnouncer extends CommonAnnouncer {
 
     public async send(object: ISiteTask) {
         switch (this.cfg.mode) {
-            case TelegramUploadMode.Upload:
+            case TelegramAnnouncerUploadMode.Upload:
                 await this.bot.telegram.sendPhoto(this.cfg.chatid, {
                     source: fs.createReadStream(object.fullpath)
                 });
                 break;
-            case TelegramUploadMode.SendTextMessage:
-                await this.bot.telegram.sendMessage(this.cfg.chatid, object.url);
-                break;
-            case TelegramUploadMode.SendURL:
+            case TelegramAnnouncerUploadMode.URL:
                 await this.bot.telegram.sendPhoto(this.cfg.chatid, object.url);
                 break;
+            default:
+                break;
         }
+        if(this.cfg.sendtext)
+            await this.bot.telegram.sendMessage(this.cfg.chatid, await this.compileTemplate(object));
     }
 }
 
-export enum TelegramUploadMode {
+export enum TelegramAnnouncerUploadMode {
     Upload = "upload",
-    SendURL = "sendurl",
-    SendTextMessage = "sendtext"
+    URL = "url",
+    None = "none"
 }

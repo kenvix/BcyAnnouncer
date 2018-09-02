@@ -1,10 +1,16 @@
 tg:
-    enable: false
+    enable: true
     name: MoeNetBot
     key: 422950672:AAGHNf8xm3tlQwVisem8hBxRokoCdHwcYts
     chatid: "@BcyPhotos"
     sleep: 500
-    mode: sendurl
+    #工作模式，以下选项的任意一种
+    #upload 直接上传文件
+    #url 提交给Telegram的文件原始URL，由TG服务器下载后发布
+    #none 不干
+    mode: url+text
+    #再追加一条消息(使用EJS渲染)发布图片信息
+    sendtext: true
     template: telegram.md
     proxy: 
         type: socks5

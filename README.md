@@ -1,13 +1,10 @@
 # 半次元自动爬虫
-此项目正在开发中，当前状态：
-```
-正在实现Telegram发布
-√ 已实现多线程下载和记录
-```
+爬取热门项目并自动发布到博客(XMLRPC)和Telegram频道          
+所有支持 Wordpress XMLRPC API 的博客，例如 Wordpress/Typecho/Emlog 都可以使用。     
+默认爬取【本周热门】，你可以修改配置文件来爬取所有结构相似的页面。    
+请一定要记得修改延时设置，防止被屏蔽。      
 
- * 支持使用代理
- * Telegram 部分支持使用代理
- 
+当前状态：V1.0 版本已发布
 ## 配置博客文章发布
 您需要使用支持 XMLRPC (或称为离线写作) 的博客程序，例如 Wordpress和Typecho.      
 然后，修改 `config.json` 的 `xmlrpc` 节的 `url` 字段   
@@ -16,7 +13,7 @@ Typecho 通常为：`http(s)://博客地址/index.php/action/xmlrpc`
 你可以使用 Microsoft Word 测试你的博客。安全起见，建议您禁用 Pingback
 ## 模版
 此程序使用 EJS 渲染模版。你可以使用 EJS 的语法。    
-但是，若你要发布到 Telegram 频道，则应遵循 Markdown 语法。     
+但是，若你要发布到 Telegram 频道，则同时应遵循 Markdown 语法。     
 你可以使用下列变量：    
 
 | Name       | Description         |

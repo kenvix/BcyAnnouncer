@@ -17,7 +17,7 @@ export default abstract class CommonAnnouncer {
     }
 
     public addTask(object: ISiteTask) {
-        if(this.tasks !instanceof Array)
+        if(this.tasks !instanceof Array || typeof(object[0]) == "undefined")
             this.tasks = []; //Node, FUCK YOU!!!
         this.tasks.push(object);
         this.saveTasks();
@@ -55,7 +55,7 @@ export default abstract class CommonAnnouncer {
         const fullpath = path.join(__dirname, "template", file + ".ejs");
         if(!fs.existsSync(fullpath))
             throw new IllegalArgumentError("EJS File not exist!!!");
-        return await new Promise((resolve, reject) => {
+        return <string>await new Promise((resolve, reject) => {
             ejs.renderFile(fullpath, {item: object}, (err, str) => {
                 if(err) reject(err);
                 else resolve(str);
