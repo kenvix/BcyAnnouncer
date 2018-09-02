@@ -7,5 +7,10 @@ Tags:
 </ul>
 <div>
     <%= item.description %>
+    <% if(typeof(item.localurl) != "undefined" && item.localurl != null) { %>
+    <img src="<%= item.localurl %>">
+    <% } else { %>
+    <img src="<%= item.url %>">
+    <% } %>
 </div>
 <p>From: <a href="<%= item.detailUrl %>" target="_blank"><%= item.detailUrl %></a></p>

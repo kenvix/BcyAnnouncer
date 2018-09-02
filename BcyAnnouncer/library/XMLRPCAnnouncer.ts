@@ -4,13 +4,11 @@ import CommonAnnouncer from "./CommonAnnouncer";
 import * as mime from "mime";
 import * as xmlrpc from "xmlrpc";
 import * as parseURL from "url";
-import Templater from "./Templater";
-import {ActionRefusedError} from "./Errors";
-import Promise = JQuery.Promise;
+import {ActionRefusedError, NetworkError} from "./Errors";
 
 /**
  * Announcer of Wordpress XMLRPC API
- * @see https://codex.wordpress.org/XML-RPC_WordPress_API/Posts
+ * @see https://codex.wordpress.org/XML-RPC_WordPress_API
  */
 export default class XMLRPCAnnouncer extends CommonAnnouncer {
     cfg: IXMLRPCConfig;
@@ -32,24 +30,13 @@ export default class XMLRPCAnnouncer extends CommonAnnouncer {
         });
     }
 
-    public async buildForm(object: ISiteTask) {
+    public async buildForm(data: any) {
         return [
             this.cfg.blog_id,
             this.cfg.username,
             this.cfg.password,
-            {
-                "post_title" : await this.compileTemplate(object, "XMLRPC.title"),
-                "post_status" : this.cfg.status,
-                "post_content": await this.compileTemplate(object),
-                "terms_names" : {
-                    "post_tag": object.tags,
-                    "category": this.cfg.category,
-                    //"comment_status": this.cfg.comment_status,
-                    //"post_password" : this.cfg.post_password,
-                    //"ping_status" : this.cfg.ping_status,
-                    //"post_format" : this.cfg.post_format,
-                }
-            }];
+            data
+        ];
     }
 
     public async start() {
@@ -62,18 +49,47 @@ export default class XMLRPCAnnouncer extends CommonAnnouncer {
      * @returns {Promise<string>} new post id
      */
     public async send(object: ISiteTask) {
-        try {
-            if(this.cfg.upload) {
-
-            }
-            return <string>await new Promise(async (resolve, reject) => {
-                this.client.methodCall("wp.newPost", await this.buildForm(object), (error, value) => {
+        if(this.cfg.upload) {
+            const uploadBase64Binary = <string>await new Promise((resolve, reject) => {
+                fs.readFile(object.fullpath, (err, str) => {
+                    if(err) reject(err);
+                    else resolve(str);
+                });
+            });
+            const uploadData = {
+                "name": object.filename,
+                "type": mime.getType(object.filename),
+                "bits": uploadBase64Binary,
+                "overwrite": true
+            };
+            const uploadResult = <IXMLRPCUploadResult>await new Promise(async (resolve, reject) => {
+                this.client.methodCall("wp.uploadFile", await this.buildForm(uploadData), (error, value) => {
                     if(error) reject(error);
                     else resolve(value);
                 });
             });
-        } catch (e) {
-            throw new ActionRefusedError(e.toString());
+            if(uploadResult.url.length <= 1)
+                throw new NetworkError("XMLRPC: Unable to upload file.");
+            object.localurl = uploadResult.url;
         }
+        const postData = {
+            "post_title" : await this.compileTemplate(object, "XMLRPC.title"),
+            "post_status" : this.cfg.status,
+            "post_content": await this.compileTemplate(object),
+            "terms_names" : {
+                "post_tag": object.tags,
+                "category": this.cfg.category,
+                //"comment_status": this.cfg.comment_status,
+                //"post_password" : this.cfg.post_password,
+                //"ping_status" : this.cfg.ping_status,
+                //"post_format" : this.cfg.post_format,
+            }
+        };
+        return <string>await new Promise(async (resolve, reject) => {
+            this.client.methodCall("wp.newPost", await this.buildForm(postData), (error, value) => {
+                if(error) reject(error);
+                else resolve(value);
+            });
+        });
     }
 }
