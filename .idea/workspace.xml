@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a9274c55-1a33-4088-a743-231ced929b9c" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/BcyAnnouncer/library/interface/IXMLRPCUploadResult.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BcyAnnouncer/library/XMLRPCAnnouncer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BcyAnnouncer/library/XMLRPCAnnouncer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BcyAnnouncer/library/template/XMLRPC.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/BcyAnnouncer/library/template/XMLRPC.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BcyAnnouncer/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BcyAnnouncer/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BcyAnnouncer/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/BcyAnnouncer/package.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,23 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="315">
-                <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="XMLRPCAnnouncer.ts" pinned="false" current-in-tab="true">
+      <file leaf-file-name="XMLRPCAnnouncer.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BcyAnnouncer/library/XMLRPCAnnouncer.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="104">
-              <caret line="64" column="18" selection-start-line="64" selection-start-column="17" selection-end-line="64" selection-end-column="18" />
+            <state relative-caret-position="280">
+              <caret line="74" column="26" selection-start-line="74" selection-start-column="26" selection-end-line="74" selection-end-column="26" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -44,10 +32,22 @@
       <file leaf-file-name="Bcy.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BcyAnnouncer/library/Bcy.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
+            <state relative-caret-position="356">
               <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.ts" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/BcyAnnouncer/app.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="104">
+              <caret line="20" column="1" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -132,6 +132,7 @@
       <find>new promise</find>
       <find>comment_status</find>
       <find>base</find>
+      <find>config.json</find>
     </findStrings>
     <replaceStrings>
       <replace>this.name</replace>
@@ -155,7 +156,6 @@
         <option value="$PROJECT_DIR$/BcyAnnouncer/library/bcy.ts" />
         <option value="$PROJECT_DIR$/BcyAnnouncer/library/index.ts" />
         <option value="$PROJECT_DIR$/BcyAnnouncer/tsconfig.json" />
-        <option value="$PROJECT_DIR$/BcyAnnouncer/app.ts" />
         <option value="D:/1.js" />
         <option value="$PROJECT_DIR$/BcyAnnouncer/library/TelegramAnnouncer.ts" />
         <option value="$PROJECT_DIR$/BcyAnnouncer/library/template/XMLRPC.title.ejs" />
@@ -171,6 +171,7 @@
         <option value="$PROJECT_DIR$/BcyAnnouncer/config.json" />
         <option value="$PROJECT_DIR$/BcyAnnouncer/package.json" />
         <option value="$PROJECT_DIR$/BcyAnnouncer/library/XMLRPCAnnouncer.ts" />
+        <option value="$PROJECT_DIR$/BcyAnnouncer/app.ts" />
       </list>
     </option>
   </component>
@@ -192,7 +193,7 @@
     <servers />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
+    <option name="x" value="-10" />
     <option name="width" value="1735" />
     <option name="height" value="1000" />
   </component>
@@ -201,9 +202,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -240,6 +238,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -247,7 +248,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Web Projects/MCAccount" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="" />
@@ -331,6 +332,7 @@
       <workItem from="1535731203409" duration="422000" />
       <workItem from="1535773805726" duration="9777000" />
       <workItem from="1535794742166" duration="2041000" />
+      <workItem from="1535857195949" duration="583000" />
     </task>
     <task id="LOCAL-00001" summary="rename classes">
       <created>1535623225303</created>
@@ -343,7 +345,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30414000" />
+    <option name="totallyTimeSpent" value="30997000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -363,14 +365,14 @@
       <window_info id="Capture Tool" order="2" />
       <window_info anchor="bottom" id="TypeScript" order="7" weight="0.32952926" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2419571" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24530831" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49932975" weight="0.4807418" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49932975" visible="true" weight="0.4807418" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Messages" order="7" />
@@ -447,14 +449,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/BcyAnnouncer/library/XMLRPCAnnouncer.ts</url>
-          <line>65</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
@@ -462,13 +456,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/BcyAnnouncer/library/template/XMLRPC.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" column="5" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BcyAnnouncer/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
@@ -662,15 +649,15 @@
     </entry>
     <entry file="file://D:/1.js" />
     <entry file="file://$PROJECT_DIR$/BcyAnnouncer/library/template/Telegram.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="10" column="7" lean-forward="true" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
+        </state>
+      </provider>
       <provider editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor />
           <second_editor />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" column="7" lean-forward="true" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -678,16 +665,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="37" column="17" selection-start-line="37" selection-start-column="17" selection-end-line="37" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BcyAnnouncer/app.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="32" column="36" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -831,9 +808,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/BcyAnnouncer/library/XMLRPCAnnouncer.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="74" column="26" selection-start-line="74" selection-start-column="26" selection-end-line="74" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/BcyAnnouncer/library/Bcy.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
+        <state relative-caret-position="356">
           <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
@@ -841,10 +828,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BcyAnnouncer/library/XMLRPCAnnouncer.ts">
+    <entry file="file://$PROJECT_DIR$/BcyAnnouncer/config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="1" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BcyAnnouncer/app.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="104">
-          <caret line="64" column="18" selection-start-line="64" selection-start-column="17" selection-end-line="64" selection-end-column="18" />
+          <caret line="20" column="1" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>

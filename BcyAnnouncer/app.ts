@@ -6,16 +6,17 @@ import Bcy from "./library/bcy";
 import TelegramAnnouncer from "./library/telegramAnnouncer";
 import IEnabledAnnouncers from "./library/interface/IEnabledAnnouncers";
 import XMLRPCAnnouncer from "./library/xmlrpcAnnouncer";
+import * as yaml from "js-yaml";
 
 (async () => {
     //Initialize
     console.log("Bcy Telegram Announcer v1.0 // By Kenvix");
-    const cfgPath = path.join(__dirname, "config.json");
+    const cfgPath = path.join(__dirname, "config.yml");
     if (!fs.existsSync(cfgPath)) {
         console.error(cfgPath + " not exist!!");
         process.exit(2);
     }
-    let config: IConfig = JSON.parse(fs.readFileSync(cfgPath, "utf8"));
+    let config: IConfig = yaml.safeLoad(fs.readFileSync(cfgPath, "utf8"));
     const downloadPath = path.join(__dirname, config.site.storage.dir);
     const indexPath = path.join(__dirname, "index");
     config.site.storage.dir = downloadPath;
