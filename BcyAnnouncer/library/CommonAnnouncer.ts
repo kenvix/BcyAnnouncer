@@ -7,7 +7,7 @@ import {IllegalArgumentError} from "./Errors";
  * Common Announcer
  */
 export default abstract class CommonAnnouncer {
-    tasks: ISiteTasks = [];
+    tasks: ISiteTask[] = [];
     isTaskLoaded = false;
     name: string;
 
@@ -32,7 +32,7 @@ export default abstract class CommonAnnouncer {
             const storagePath = path.join(__dirname, "..", "index", this.name + ".json");
             if (!fs.existsSync(storagePath))
                 fs.writeFileSync(storagePath, "{}", "utf8");
-            this.tasks = <ISiteTasks>JSON.parse(fs.readFileSync(storagePath, "utf8"));
+            this.tasks = <ISiteTask[]>JSON.parse(fs.readFileSync(storagePath, "utf8"));
         }
     }
 
@@ -47,6 +47,7 @@ export default abstract class CommonAnnouncer {
                 this.tasks.push(task);
                 console.warn(err);
             }
+            this.saveTasks();
         }
         setTimeout(async () => await this.startProcessTask(), this.sleep);
     }

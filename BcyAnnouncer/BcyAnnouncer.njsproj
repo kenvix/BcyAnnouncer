@@ -92,7 +92,7 @@
     <TypeScriptCompile Include="library\interface\ISiteTask.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="library\interface\ISiteTasks.ts">
+    <TypeScriptCompile Include="library\interface\ISiteTaskChild.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="library\interface\IConfig.ts">

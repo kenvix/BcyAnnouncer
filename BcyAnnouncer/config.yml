@@ -1,18 +1,21 @@
 tg:
-    enable: true
+    enable: false
     name: MoeNetBot
     key: 422950672:AAGHNf8xm3tlQwVisem8hBxRokoCdHwcYts
     chatid: "@BcyPhotos"
     sleep: 500
     #工作模式，以下选项的任意一种
-    #upload 直接上传文件
+    #upload 直接上传图片文件（有损，不推荐，易导致问题）
+    #file 直接上传图片，但作为【文件】发布（无损）
     #url 提交给Telegram的文件原始URL，由TG服务器下载后发布
+    #urlfile 提交给Telegram的文件原始URL，由TG服务器下载后发布，但作为【文件】发布（无损）
     #none 不干
-    mode: url+text
+    mode: upload
     #再追加一条消息(使用EJS渲染)发布图片信息
     sendtext: true
-    template: telegram.md
-    proxy: 
+    #若设置为false，则单独发布消息。若为true，则最多只能发布200字，多余的字自动截断
+    ascaption: true
+    proxy: #socks5 / https / none
         type: socks5
         socks5: 
             host: 127.0.0.1
@@ -23,11 +26,10 @@ tg:
            url:
 xmlrpc:
      #见 https://codex.wordpress.org/XML-RPC_WordPress_API
-    enable: true
+    enable: false
     url: http://localhost/wordpress/xmlrpc.php
     username: Kenvix
     password: "000000"
-    template: xmlrpc.html
     upload: true
     status: publish
     category:
@@ -41,6 +43,8 @@ xmlrpc:
 site:
     url: https://bcy.net/coser/toppost100
     extname: .jpg
+    #连续失败多少次后放弃此任务，0为无限重试
+    maxfails: 99
     userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36
     sleep:
         download: 2000

@@ -35,7 +35,17 @@ import * as yaml from "js-yaml";
         xmlrpc: config.xmlrpc.enable ? xmlrpc : false
     };
     const site = new Bcy(config.site, enabledAnnouncers);
-
+    /*
+    process.on('SIGINT', async () => {
+        console.log("Exiting: Saving tasks ...");
+        if (config.tg.enable)
+            await tg.saveTasks();
+        if (config.xmlrpc.enable)
+            await xmlrpc.saveTasks();
+        await site.saveIndex();
+        process.exit(0);
+    });
+    */
     if (config.tg.enable) {
         tg.start();
         console.log("Publisher Module: Telegram Channel ["+ config.tg.chatid +"] Enabled");

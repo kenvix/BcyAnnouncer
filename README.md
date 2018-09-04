@@ -41,5 +41,11 @@ Typecho 通常为：`http(s)://博客地址/index.php/action/xmlrpc`
 Error: Unknown XML-RPC tag 'TITLE'    
 Error: Unknown XML-RPC tag 'META'   
 ```
-你的服务器配置有问题，打印多半是服务端提示 `413 Request Entity Too Large`     
-检查你的服务端(PHP等)的文件大小限制
+你的服务器配置有问题，打印多半是服务端提示了某些信息，一般有：    
+**301 Moved Permanently**    
+检查该地址是否被重定向了   
+**413 Request Entity Too Large**   
+检查你的服务端(PHP等)的文件大小限制     
+Nginx: 在 `nginx.conf` 的 `http` 节设置 `client_max_body_size 999M;`     
+PHP: 在 `php.ini` 设置 `post_max_size = 999M` 和 `upload_max_filesize = 999M`         
+总之建议先用其他离线撰写软件测试下文章发布和图片上传

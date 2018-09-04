@@ -3,7 +3,7 @@ interface ITelegramConfig extends ICommonAnnouncerConfig {
     key: string,
     chatid: string,
     mode: string,
-    template: string,
+    ascaption: boolean,
     sendtext: boolean,
     proxy: {
         type: string,

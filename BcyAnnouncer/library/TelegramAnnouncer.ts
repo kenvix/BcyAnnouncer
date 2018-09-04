@@ -43,25 +43,42 @@ export default class TelegramAnnouncer extends CommonAnnouncer {
     }
 
     public async send(object: ISiteTask) {
+        let message;
+        if(this.cfg.sendtext)
+            message = await this.compileTemplate(object);
         switch (this.cfg.mode) {
             case TelegramAnnouncerUploadMode.Upload:
                 await this.bot.telegram.sendPhoto(this.cfg.chatid, {
                     source: fs.createReadStream(object.fullpath)
+                }, {
+                    caption: (this.cfg.sendtext && this.cfg.ascaption) ? message.substring(0, 200) : ''
+                });
+                break;
+            case TelegramAnnouncerUploadMode.File:
+                await this.bot.telegram.sendDocument(this.cfg.chatid, {
+                    source: fs.createReadStream(object.fullpath)
+                }, {
+                    caption: (this.cfg.sendtext && this.cfg.ascaption) ? message.substring(0, 200) : ''
                 });
                 break;
             case TelegramAnnouncerUploadMode.URL:
                 await this.bot.telegram.sendPhoto(this.cfg.chatid, object.url);
                 break;
+            case TelegramAnnouncerUploadMode.URLFile:
+                await this.bot.telegram.sendDocument(this.cfg.chatid, object.url);
+                break;
             default:
                 break;
         }
-        if(this.cfg.sendtext)
-            await this.bot.telegram.sendMessage(this.cfg.chatid, await this.compileTemplate(object));
+        if(this.cfg.sendtext && !this.cfg.ascaption)
+            await this.bot.telegram.sendMessage(this.cfg.chatid, message);
     }
 }
 
 export enum TelegramAnnouncerUploadMode {
     Upload = "upload",
     URL = "url",
+    File = "file",
+    URLFile = "urlfile",
     None = "none"
 }
