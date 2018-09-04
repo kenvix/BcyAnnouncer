@@ -48,27 +48,29 @@ export default class XMLRPCAnnouncer extends CommonAnnouncer {
      */
     public async send(object: ISiteTask) {
         if(this.cfg.upload) {
-            const uploadBase64Binary = <string>await new Promise((resolve, reject) => {
-                fs.readFile(object.fullpath,(err, str) => {
-                    if(err) reject(err);
-                    else resolve(str);
+            for (let i = 0; i < object.img.length; i++) {
+                const uploadBase64Binary = <string>await new Promise((resolve, reject) => {
+                    fs.readFile(object.img[i].fullpath,(err, str) => {
+                        if(err) reject(err);
+                        else resolve(str);
+                    });
                 });
-            });
-            const uploadData = {
-                "name": object.filename,
-                "type": mime.getType(object.filename),
-                "bits": uploadBase64Binary,
-                "overwrite": true
-            };
-            const uploadResult = <IXMLRPCUploadResult>await new Promise(async (resolve, reject) => {
-                this.client.methodCall("wp.uploadFile", await this.buildForm(uploadData), (error, value) => {
-                    if(error) reject(error);
-                    else resolve(value);
+                const uploadData = {
+                    "name": object.img[i].filename,
+                    "type": mime.getType(object.img[i].filename),
+                    "bits": uploadBase64Binary,
+                    "overwrite": true
+                };
+                const uploadResult = <IXMLRPCUploadResult>await new Promise(async (resolve, reject) => {
+                    this.client.methodCall("wp.uploadFile", await this.buildForm(uploadData), (error, value) => {
+                        if(error) reject(error);
+                        else resolve(value);
+                    });
                 });
-            });
-            if(uploadResult.url.length <= 1)
-                throw new NetworkError("XMLRPC: Unable to upload file.");
-            object.localurl = uploadResult.url;
+                if(uploadResult.url.length <= 1)
+                    throw new NetworkError("XMLRPC: Unable to upload file.");
+                object.img[i].localurl = uploadResult.url;
+            }
         }
         const postData = {
             "post_title" : await this.compileTemplate(object, "XMLRPC.title"),

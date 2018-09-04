@@ -23,7 +23,6 @@ import * as yaml from "js-yaml";
         fs.mkdirSync(downloadPath);
     if (!fs.existsSync(indexPath))
         fs.mkdirSync(indexPath);
-    config.site.storage.index = path.join(indexPath, config.site.storage.index);
     if (!fs.existsSync(config.site.storage.index)) {
         fs.writeFileSync(config.site.storage.index, "{}", "utf8");
     }

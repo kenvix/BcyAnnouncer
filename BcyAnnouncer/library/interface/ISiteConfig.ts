@@ -3,6 +3,7 @@ interface ISiteConfig {
     extname: string,
     userAgent: string,
     maxfails: number,
+    quality: string,
     sleep: {
         download: number,
         check: number

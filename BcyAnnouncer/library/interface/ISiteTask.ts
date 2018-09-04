@@ -1,16 +1,10 @@
-interface ISiteTask extends ISiteTaskChild {
+interface ISiteTask {
     detailUrl: string,
     author?: string,
+    id: string,
     tags?: string[],
     description?: string,
-    status: SiteTaskStatus,
+    status: any,
     fail: number,
-    child: Array<ISiteTaskChild>
-}
-
-enum SiteTaskStatus {
-    Pending,
-    Downloading,
-    Failed,
-    Abandoned
+    img: Array<ISiteTaskImg>
 }

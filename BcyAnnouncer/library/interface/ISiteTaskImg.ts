@@ -1,4 +1,4 @@
-interface ISiteTaskChild {
+interface ISiteTaskImg {
     url: string,
     filename: string,
     fullpath?: string,

@@ -9,13 +9,13 @@ tg:
     #file 直接上传图片，但作为【文件】发布（无损）
     #url 提交给Telegram的文件原始URL，由TG服务器下载后发布
     #urlfile 提交给Telegram的文件原始URL，由TG服务器下载后发布，但作为【文件】发布（无损）
-    #none 不干
+    #none 不发布图片
     mode: upload
     #再追加一条消息(使用EJS渲染)发布图片信息
     sendtext: true
     #若设置为false，则单独发布消息。若为true，则最多只能发布200字，多余的字自动截断
     ascaption: true
-    proxy: #socks5 / https / none
+    proxy: #socks5 / https / none(无代理)
         type: socks5
         socks5: 
             host: 127.0.0.1
@@ -26,7 +26,7 @@ tg:
            url:
 xmlrpc:
      #见 https://codex.wordpress.org/XML-RPC_WordPress_API
-    enable: false
+    enable: true
     url: http://localhost/wordpress/xmlrpc.php
     username: Kenvix
     password: "000000"
@@ -45,6 +45,8 @@ site:
     extname: .jpg
     #连续失败多少次后放弃此任务，0为无限重试
     maxfails: 99
+    #画质命令字符，留空为原画。可用：  /w650
+    quality:
     userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36
     sleep:
         download: 2000

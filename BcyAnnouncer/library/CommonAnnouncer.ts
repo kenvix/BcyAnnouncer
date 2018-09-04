@@ -42,7 +42,7 @@ export default abstract class CommonAnnouncer {
             try {
                 await this.send(task);
                 if (printLog)
-                    console.log("Published to " + this.name + " API: " + task.url);
+                    console.log("Published to " + this.name + " API: " + task.id);
             } catch (err) {
                 this.tasks.push(task);
                 console.warn(err);

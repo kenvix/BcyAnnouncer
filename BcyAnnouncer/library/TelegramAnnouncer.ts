@@ -1,6 +1,5 @@
 import Telegraf, {ContextMessageUpdate} from "telegraf";
 import * as fs from "fs";
-import "./TelegramUploadMode";
 import CommonAnnouncer from "./CommonAnnouncer";
 
 export default class TelegramAnnouncer extends CommonAnnouncer {
@@ -46,32 +45,35 @@ export default class TelegramAnnouncer extends CommonAnnouncer {
         let message;
         if(this.cfg.sendtext)
             message = await this.compileTemplate(object);
-        switch (this.cfg.mode) {
-            case TelegramAnnouncerUploadMode.Upload:
-                await this.bot.telegram.sendPhoto(this.cfg.chatid, {
-                    source: fs.createReadStream(object.fullpath)
-                }, {
-                    caption: (this.cfg.sendtext && this.cfg.ascaption) ? message.substring(0, 200) : ''
-                });
-                break;
-            case TelegramAnnouncerUploadMode.File:
-                await this.bot.telegram.sendDocument(this.cfg.chatid, {
-                    source: fs.createReadStream(object.fullpath)
-                }, {
-                    caption: (this.cfg.sendtext && this.cfg.ascaption) ? message.substring(0, 200) : ''
-                });
-                break;
-            case TelegramAnnouncerUploadMode.URL:
-                await this.bot.telegram.sendPhoto(this.cfg.chatid, object.url);
-                break;
-            case TelegramAnnouncerUploadMode.URLFile:
-                await this.bot.telegram.sendDocument(this.cfg.chatid, object.url);
-                break;
-            default:
-                break;
+        let caption = (this.cfg.sendtext && this.cfg.ascaption) ? message.substring(0, 200) : '';
+        for (let value of object.img)  {
+            switch (this.cfg.mode) {
+                case TelegramAnnouncerUploadMode.Upload:
+                    await this.bot.telegram.sendPhoto(this.cfg.chatid, {
+                        source: fs.createReadStream(value.fullpath)
+                    }, {
+                        caption: caption
+                    });
+                    break;
+                case TelegramAnnouncerUploadMode.File:
+                    await this.bot.telegram.sendDocument(this.cfg.chatid, {
+                        source: fs.createReadStream(value.fullpath)
+                    }, {
+                        caption: caption
+                    });
+                    break;
+                case TelegramAnnouncerUploadMode.URL:
+                    await this.bot.telegram.sendPhoto(this.cfg.chatid, value.url);
+                    break;
+                case TelegramAnnouncerUploadMode.URLFile:
+                    await this.bot.telegram.sendDocument(this.cfg.chatid, value.url);
+                    break;
+                default:
+                    break;
+            }
+            if(this.cfg.sendtext && !this.cfg.ascaption)
+                await this.bot.telegram.sendMessage(this.cfg.chatid, message);
         }
-        if(this.cfg.sendtext && !this.cfg.ascaption)
-            await this.bot.telegram.sendMessage(this.cfg.chatid, message);
     }
 }
 

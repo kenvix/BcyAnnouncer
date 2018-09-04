@@ -29,61 +29,72 @@ export default class Bcy {
     }
 
     public async addTask(object: JQuery<HTMLElement>): Promise<void> {
-        const info = await this.parseObject(object);
-        if (typeof(this.badTasks[info.hash]) == "undefined" && typeof(this.tasks[info.hash]) == "undefined" && !fs.existsSync(info.fullpath))
-            this.tasks.push(info);
+        try {
+            const info = await this.parseObject(object);
+            if (typeof(this.badTasks[info.id]) == "undefined" && typeof(this.tasks[info.id]) == "undefined" && !fs.existsSync(info.img[0].fullpath))
+                this.tasks.push(info);
+        } catch (e) {
+            console.warn("Failed to parse bcy info: " + e);
+        }
     }
 
     public async startProcessTask(printLog: boolean = true) {
         if (this.tasks.length > 0) {
             const task = this.tasks.shift();
             task.status = SiteTaskStatus.Downloading;
-            if (printLog)
-                console.log("download file: " + task.url);
             try {
-                const extname = path.extname(task.fullpath);
-                if(extname == ".jpg" || extname == ".png" || extname == ".gif" || extname == ".webp") {
-                    let dl = (new Downloader()).download(task.url, task.fullpath);
-                    dl.on("error", msg => {
-                        throw new Error("failed to download: " + msg);
-                    });
-                    dl.start();
-                    await pEvent(dl, "start");
-                    let downloadStats: IXDownloaderStats = dl.getStats();
-                    const bar = new ProgressBar.Bar({clearOnComplete:true}, ProgressBar.Presets.shades_classic);
-                    bar.start(downloadStats.total.size, downloadStats.total.downloaded);
-                    const downloadTimer = setInterval(() => {
-                        downloadStats = dl.getStats();
-                        bar.update(downloadStats.total.downloaded)
-                    }, 50);
-                    await pEvent(dl, "end");
-                    clearInterval(downloadTimer);
-                    bar.stop();
-                    await this.addIndex(task);
+                const artDir = path.join(task.img[0].fullpath, "..");
+                if(!fs.existsSync(artDir))
+                    fs.mkdirSync(artDir);
+                for(let imgTask of task.img) {
                     if (printLog)
-                        console.log("file downloaded: " + task.fullpath);
-                    await this.addIndex(task);
-                    await this.publish(task);
+                        console.log("download file: " + imgTask.url);
+                    const extname = path.extname(imgTask.fullpath);
+                    if(extname == ".jpg" || extname == ".png" || extname == ".gif" || extname == ".webp") {
+                        let dl = (new Downloader()).download(imgTask.url, imgTask.fullpath);
+                        dl.on("error", msg => {
+                            throw new Error("Failed to download: " + msg);
+                        });
+                        dl.start();
+                        await pEvent(dl, "start");
+                        let downloadStats: IXDownloaderStats = dl.getStats();
+                        const bar = new ProgressBar.Bar({clearOnComplete:true}, ProgressBar.Presets.shades_classic);
+                        bar.start(downloadStats.total.size, downloadStats.total.downloaded);
+                        const downloadTimer = setInterval(() => {
+                            downloadStats = dl.getStats();
+                            bar.update(downloadStats.total.downloaded)
+                        }, 50);
+                        await pEvent(dl, "end");
+                        clearInterval(downloadTimer);
+                        bar.stop();
+                        if (printLog)
+                            console.log("file downloaded: " + imgTask.fullpath);
+                    }
                 }
+                await this.addIndex(task);
+                await this.publish(task);
             } catch (err) {
-                task.fail++;
-                if(this.cfg.maxfails > 0 && task.fail >= this.cfg.maxfails) {
-                    task.status = SiteTaskStatus.Abandoned;
-                    this.badTasks[task.hash] = task;
-                    await this.saveIndex("bad", this.badTasks);
-                } else {
-                    task.status = SiteTaskStatus.Failed;
-                    this.tasks.push(task);
+                try {
+                    task.fail++;
+                    if(this.cfg.maxfails > 0 && task.fail >= this.cfg.maxfails) {
+                        task.status = SiteTaskStatus.Abandoned;
+                        this.badTasks[task.id] = task;
+                        await this.saveIndex("bad", this.badTasks);
+                    } else {
+                        task.status = SiteTaskStatus.Failed;
+                        this.tasks.push(task);
+                    }
+                } catch (e) {
+                    console.warn("Unable to re-add failed task: " + e);
                 }
-                if(printLog)
-                    console.warn(err);
+                console.warn(err);
             }
         }
         setTimeout(async () => await this.startProcessTask(), this.cfg.sleep.download);
     }
 
     protected async addIndex(object: ISiteTask) {
-        this.index[object.hash] = object;
+        this.index[object.id] = object;
         await this.saveIndex();
     }
 
@@ -97,8 +108,6 @@ export default class Bcy {
 
     protected async parseObject(object: JQuery<HTMLElement>): Promise<ISiteTask> {
         const father = object.parent();
-        const url = object.attr("src");
-        const returnUrl = url.substring(0, url.indexOf(this.cfg.extname) + 4);
         const detailUrl = this.domain + father.attr("href");
         let tags: string[] = [];
         let res = await superagent.get(detailUrl)
@@ -115,19 +124,33 @@ export default class Bcy {
         $("div.post__content>p>br").each(function () {
             $(this).replaceWith("\n");
         });
-        const filename = path.basename(uri.parse(returnUrl).pathname);
+        let imgs = [];
+        const extname = this.cfg.extname;
+        const storageDir = this.cfg.storage.dir;
+        $("div.post__content>img.detail_std").each(function () {
+            const url = $(this).attr("src");
+            const returnUrl = url.substring(0, url.indexOf(extname) + 4);
+            const filename = path.basename(uri.parse(returnUrl).pathname);
+            imgs.push({
+                url: returnUrl,
+                filename: filename,
+                hash: filename.substring(0, filename.length - path.extname(filename).length)
+            });
+        });
+        if(imgs.length < 1)
+            throw new Error("Invaild object!!");
+        for (let key in imgs) {
+            imgs[key].fullpath = path.join(storageDir, imgs[0].hash, imgs[key].filename);
+        }
         return {
-            url: returnUrl,
+            id: imgs[0].hash,
             detailUrl: detailUrl,
-            filename: filename,
             description: $("div.post__content>p").text(),
             author: father.attr("title").trim(),
             tags: tags,
             status: SiteTaskStatus.Pending,
             fail: 0,
-            fullpath: path.join(this.cfg.storage.dir, filename),
-            hash: filename.substring(0, filename.length - path.extname(filename).length),
-            child: []
+            img: imgs
         }
     }
 
@@ -161,4 +184,11 @@ export default class Bcy {
         if (this.enabledAnnouncers.xmlrpc)
             this.enabledAnnouncers.xmlrpc.addTask(object);
     }
+}
+
+enum SiteTaskStatus {
+    Pending,
+    Downloading,
+    Failed,
+    Abandoned
 }

@@ -9,3 +9,9 @@
 */downloads
 */download
 *.map
+BcyAnnouncer/index
+BcyAnnouncer/download
+BcyAnnouncer/obj
+BcyAnnouncer/bin
+*.js
+*.map
